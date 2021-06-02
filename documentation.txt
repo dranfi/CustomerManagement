@@ -1,0 +1,21 @@
+﻿I developed the solution using Visual Studio for Mac on .Net Core 5
+
+I first created a class Customer in a Library project Utilities that would be used by the Console and the RESTFul endpoint.
+To parse the CSV I used the Library CsvHelper which I previously used for a test application for an home used script.
+I followed Microsoft instructions to create a RESTFUL WebApi easilly on .NET Core: https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-5.0&tabs=visual-studio-mac
+I adapted the instructions with my own class Customer.
+This auto-generated code add all the standard REST methods (ADD 1,GET 1, GET ALL, DELETE 1) to the endpoint and use an in-memory database.
+We could change the project to persist to a database by adding the corressponding Entity Framework DB support nuget package and updating the following code in Startup.cs:
+
+
+services.AddDbContext<CustomerContext>(opt =>
+                                               opt.UseInMemoryDatabase("customerList"));
+
+I wanted to make sure the console application CustomerCSVImport can configure it's own endpoint and CSV source so I followed https://blog.hildenco.com/2020/05/configuration-in-net-core-console.html
+to create my own appSettings.json giving ServerUrl and CSVFile variables.
+
+After running the console application and calling https://localhost:60572/api/Customer the results will be:
+[{"customerRef":"1","customerName":"A","addressLine1":"AA1","addressLine2":"AA2","town":"London","county":"Greather London","country":"UK","postCode":"EC1"},{"customerRef":"2","customerName":"B","addressLine1":"BA1","addressLine2":"BA2","town":"Manchester","county":"Lancashire","country":"UK","postCode":"M1"}]
+
+To retreive a single customer: https://localhost:60572/api/Customer/REF  eg: https://localhost:60572/api/Customer/1
+{"customerRef":"1","customerName":"A","addressLine1":"AA1","addressLine2":"AA2","town":"London","county":"Greather London","country":"UK","postCode":"EC1"}
